@@ -1,0 +1,7 @@
+service/public/js/.bundle.js
+service/public/css/.bundle.css
+service/public/js/.bundle.min.js
+service/public/css/.bundle.min.css
+/node_modules
+*.log
+.DS_Store
