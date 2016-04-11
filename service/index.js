@@ -4,6 +4,7 @@ let falcorExpress = require('falcor-express'),
     Router = require('falcor-router'),
     express = require('express'),
     bodyParser = require('body-parser'),
+    morgan = require('morgan'),
     concat = require('lodash.concat'),
     fs = require('fs');
 
@@ -17,6 +18,7 @@ let properties = require('./routes/properties.js'),
 var app = express();
 
 app.use(bodyParser.urlencoded({ 'extended': false }));
+app.use(morgan(':method :url'));
 
 // Databases.
 let es = new ElasticSearch.Client({ 'host': 'localhost:9200' });

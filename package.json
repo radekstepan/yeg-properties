@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "body-parser": "^1.15.0",
+    "colors": "^1.1.2",
     "elasticsearch": "^11.0.0",
     "express": "^4.13.4",
     "falcor": "^0.1.17",
@@ -19,6 +20,7 @@
     "lodash.keyby": "^4.3.0",
     "memdown": "^1.1.2",
     "minimist": "^1.2.0",
+    "morgan": "^1.7.0",
     "polo": "^0.8.1",
     "pouchdb": "^5.3.1"
   },

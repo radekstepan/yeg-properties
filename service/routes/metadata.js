@@ -3,12 +3,14 @@
 let _ = require('lodash');
 let keyBy = require('lodash.keyby');
 
+let log = require('../log.js');
+
 module.exports = (client) => {
   return [
     {
       // Property metadata.
       'route': 'properties[{integers:ids}].is_favorite',
-      'set': (pathSet) => {
+      'set': log((pathSet) => {
         // Keys we are updating.
         let keys = _.keys(pathSet.properties);
 
@@ -60,8 +62,8 @@ module.exports = (client) => {
         }).catch((err) => {
           console.log(err);
         });
-      },
-      'get': (pathSet) => {
+      }),
+      'get': log((pathSet) => {
         return client.allDocs({
           'keys': pathSet.ids.map(id => id.toString()),
           'include_docs': true
@@ -90,7 +92,7 @@ module.exports = (client) => {
         }).catch((err) => {
           console.log(err);
         });
-      }
+      })
     }
   ];
 };

@@ -1,4 +1,4 @@
-#yeg-properties
+#*wip* yeg-properties
 
 Property assessment data for Edmonton in React/Redux & Falcor with ElasticSearch and PouchDB backend.
 

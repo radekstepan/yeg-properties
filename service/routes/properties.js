@@ -3,6 +3,8 @@
 let _ = require('lodash');
 let keyBy = require('lodash.keyby');
 
+let log = require('../log.js');
+
 let fields = [
   'account_number',
   'suite',
@@ -21,7 +23,7 @@ module.exports = (client) => {
     {
       // Get the size of the whole list.
       'route': "properties.count",
-      'get': (pathSet) => {
+      'get': log((pathSet) => {
         return client.count({ 'index': 'yeg_property' })
         .then((res) => {
           return {
@@ -31,11 +33,11 @@ module.exports = (client) => {
         }).catch((err) => {
           console.log(err);
         });
-      }
+      })
     }, {
       // Get properties by their index.
       'route': `properties[{integers:ids}][${fields.map(f => `'${f}'`).join(',')}]`,
-      'get': (pathSet) => {
+      'get': log((pathSet) => {
         return client.mget({
           'index': 'yeg_property',
           'type': 'property',
@@ -68,7 +70,7 @@ module.exports = (client) => {
         }).catch((err) => {
           console.log(err);
         });
-      }
+      })
     }
   ]
 };

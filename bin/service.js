@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 "use strict";
 
+let c = require('colors/safe');
 let args = require('minimist');
 let polo = require('polo');
 
@@ -19,6 +20,6 @@ let opts = args(process.argv.slice(2), {
 });
 
 service(opts.dev, opts.port, (port) => {
-  console.log(`Service ${name} started on port ${port}.`);
+  console.log(`Service ${c.bold(name)} started on port ${c.bold(port)}.`);
   polo().put({ name, port });
 });
