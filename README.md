@@ -1,37 +1,21 @@
-#*wip* yeg-properties
+#yeg-properties
 
-Property assessment data for Edmonton in React/Redux & Falcor with ElasticSearch and PouchDB backend.
+Property [assessment data](https://data.edmonton.ca/City-Administration/Property-Assessment-Data/q7d6-ambg) for Edmonton in React/Flux & Falcor with ElasticSearch and PouchDB backend.
 
-https://data.edmonton.ca/City-Administration/Property-Assessment-Data/q7d6-ambg
+![image](https://raw.githubusercontent.com/radekstepan/yeg-properties/master/screenshot.png)
 
-##TODO
-- emit events when data have updated and then pass model cache into the components; `model.getCache()`
-
-##Commands
+##Quickstart
 
 ```bash
-$ curl -XDELETE 'http://localhost:9200/yeg_property/'
-$ esbulk -index yeg_property -type property output.json
+$ nvm use
+$ npm install
+$ npm start
+# Service yeg-properties started on port 8090.
 ```
 
-##Falcor
+##Architecture
 
-https://auth0.com/blog/2015/08/28/getting-started-with-falcor/
-
-https://netflix.github.io/falcor/documentation/model.html#The-Model-Cache
-
-http://netflix.github.io/falcor/video-tutorials/batching-requests.html
-
-```js
-let bodyParser = require('body-parser');
-app.use(bodyParser.urlencoded({ 'extended': false }))
-```
-
-##ElasticSearch
-
-Result window is too large, from + size must be less than or equal to: [10000] but was [100010]. See the scroll api for a more efficient way to request large data sets. This limit can be set by changing the [index.max_result_window] index level parameter.
-
-Scrolling is not intended for real time user requests, but rather for processing large amounts of data, e.g. in order to reindex the contents of one index into a new index with a different configuration.
+*TODO*
 
 ##Optimizations
 
