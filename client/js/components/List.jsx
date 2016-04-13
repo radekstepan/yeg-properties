@@ -35,7 +35,7 @@ export default React.createClass({
     let ids = [];
 
     let items = _.map(_.range(Math.min(viewport.count, count - a)), (i) => {
-      let field = (key, format) => {
+      let field = (item, key, format) => {
         return (
           <div key={key} className="td">
             {format ? numeral(item[key].value).format(format) : item[key].value}
@@ -49,14 +49,14 @@ export default React.createClass({
       // Do we have the item already?
       let content, item;
       if (item = cache.properties.byIndex[id]) {
-        let active = 'is_favorite' in item && item.is_favorite.value == 'Y';
+        let active = 'is_favorite' in item && item.is_favorite.value;
         content = (
           <div className="wrap" onClick={this._onFav.bind(this, id)}>
-            {field('account_number')}
-            {field('street_name')}
-            {field('house_number')}
-            {field('neighbourhood')}
-            {field('value', '$0,0[.]00')}
+            {field(item, 'account_number')}
+            {field(item, 'street_name')}
+            {field(item, 'house_number')}
+            {field(item, 'neighbourhood')}
+            {field(item, 'value', '$0,0[.]00')}
             <div key="is_favorite" className="td">
               <Icon name="heart" className={cls({ active })} />
             </div>

@@ -10,7 +10,7 @@ module.exports = (client, fields) => {
     {
       // Get the size of the whole list.
       'route': "properties.count",
-      'get': log((pathSet) => {
+      'get': log('GET', (pathSet) => {
         return client.count({ 'index': 'yeg_property' })
         .then((res) => {
           return {
@@ -24,7 +24,7 @@ module.exports = (client, fields) => {
     }, {
       // Get properties by their index.
       'route': `properties.byIndex[{integers:ids}][${fields.map(f => `'${f}'`).join(',')}]`,
-      'get': log((pathSet) => {
+      'get': log('GET', (pathSet) => {
         return client.mget({
           'index': 'yeg_property',
           'type': 'property',

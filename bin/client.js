@@ -33,7 +33,7 @@ service().then((model) => {
   // Get the first 3 properties.
   .then(res => model.get([ "properties", "byIndex", { 'from': 0, 'to': 2 }, fields ]))
   // Favorite the third property.
-  .then(res => model.setValue([ "properties", "byIndex", 2, "is_favorite" ], "Y"))
+  .then(res => model.call([ "properties", "byIndex", 2, "favorite" ]))
   // Get the 3 properties again.
   .then(res => model.get([ "properties", "byIndex", { 'from': 0, 'to': 2 }, fields ]))
   // Batch three requests.

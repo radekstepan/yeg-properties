@@ -6,19 +6,76 @@ let keyBy = require('lodash.keyby');
 let log = require('../log.js');
 
 module.exports = (client, fields) => {
+  // Get docs by id.
+  let getDocs = (ids) => {
+    return client.allDocs({
+      'keys': ids.map(id => id.toString()),
+      'include_docs': true
+    });
+  };
+
   return [
     {
+      // Toggle favorite.
+      'route': 'properties.byIndex[{integers:ids}].favorite',
+      'call': log('CALL', (pathSet) => {
+        let keys = pathSet.ids.map(id => id.toString());
+
+        // Get all docs.
+        return getDocs(keys).then((res) => {
+          let docs = keyBy(res.rows, 'key');
+
+          // Create a bulk set/update.
+          let bulk = _.map(keys, (key) => {
+            // Create a new document if it does not exist already.
+            if (docs[key].error == 'not_found') {
+              return _.extend({ '_id': key }, { 'is_favorite': true });
+            // Update an existing document.
+            } else {
+              if ('is_favorite' in docs[key].doc) {
+                return _.extend(docs[key].doc, { 'is_favorite': !docs[key].doc.is_favorite });
+              } else {
+                return _.extend(docs[key].doc, { 'is_favorite': true });
+              }
+            }
+          });
+
+
+          // Create/update docs in bulk.
+          return client.bulkDocs(bulk).then((res) => {
+            res = keyBy(res, 'id');
+
+            // Then format the result as a graph.
+            return _.map(bulk, (doc) => {
+              // Action successful.
+              if (doc._id in res && res[doc._id].ok) {
+                return {
+                  'path': [ 'properties', 'byIndex', doc._id, 'is_favorite' ],
+                  'value': doc.is_favorite
+                };
+              // Document does not exist. We don't actually check if this doc
+              //  exists in ElasticSearch, so...
+              } else {
+                return {
+                  'path': [ 'properties', 'byIndex', doc._id ],
+                  'value': null
+                }
+              }
+            });
+          });
+        }).catch((err) => {
+          console.log(err);
+        });
+      })
+    }, {
       // Property metadata.
       'route': `properties.byIndex[{integers:ids}][${fields.map(f => `'${f}'`).join(',')}]`,
-      'set': log((pathSet) => {
+      'set': log('SET', (pathSet) => {
         // Keys we are updating.
         let keys = _.keys(pathSet.properties.byIndex);
 
         // Get all documents.
-        return client.allDocs({
-          'keys': keys,
-          'include_docs': true
-        }).then((res) => {
+        return getDocs(keys).then((res) => {
           let docs = keyBy(res.rows, 'key');
 
           // Create a bulk set/update.
@@ -63,14 +120,13 @@ module.exports = (client, fields) => {
           console.log(err);
         });
       }),
-      'get': log((pathSet) => {
-        return client.allDocs({
-          'keys': pathSet.ids.map(id => id.toString()),
-          'include_docs': true
-        }).then((res) => {
+      'get': log('GET', (pathSet) => {
+        let keys = _.map(pathSet.ids, id => id.toString());
+
+        return getDocs(keys).then((res) => {
           let docs = keyBy(res.rows, 'key');
 
-          let results = _.map(pathSet.ids, (id) => {
+          let results = _.map(keys, (id) => {
             let doc = docs[id];
 
             // 404 or 500.
@@ -79,7 +135,6 @@ module.exports = (client, fields) => {
               'value': doc.error == 'not_found' ? null : doc.error
             }
 
-            let keys = pathSet[3];
             return _.map(_.isArray(keys) ? keys : [ keys ], (key) => {
               return {
                 'path': [ 'properties', 'byIndex', id, key ],

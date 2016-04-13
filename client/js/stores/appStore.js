@@ -83,7 +83,7 @@ class AppStore extends Store {
 
   onListFavorite(id) {
     this.model
-    .setValue([ 'properties', 'byIndex', id, 'is_favorite' ], 'Y')
+    .call([ 'properties', 'byIndex', id, 'favorite' ])
     .then(res => this.emit('%UPDATE%'));
   }
 
