@@ -8,12 +8,12 @@ export default {
   _getData(store) {
     let obj = {};
     if (store) {
-      obj[store] = stores[store].get();
+      obj[store] = stores[store].getData();
     } else {
       // Get all stores.
       let key;
       for (key in stores) {
-        obj[key] = stores[key].get();
+        obj[key] = stores[key].getData();
       }
     }
 
@@ -41,7 +41,7 @@ export default {
   componentWillUnmount() {
     let key;
     for (key in stores) {
-      stores[key].clean(this._onChange); 
+      stores[key].clean(this._onChange);
     }
   }
 

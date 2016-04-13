@@ -5,7 +5,7 @@ BROWSERIFY = ./node_modules/.bin/browserify
 UGLIFY     = ./node_modules/.bin/uglifyjs
 CLEANCSS   = ./node_modules/.bin/cleancss
 
-BIN        = ./bin/run.js
+BIN        = ./bin/service.js
 
 NAME       = $(shell node -e "console.log(require('./package.json').name)")
 
@@ -14,6 +14,9 @@ start:
 
 start-dev:
 	${BIN} --dev
+
+example:
+	./bin/client.js
 
 watch-js: build-js
 	${WATCHIFY} -e -s $(NAME) ./client/js/index.jsx -t babelify -o service/public/js/bundle.js -d -v

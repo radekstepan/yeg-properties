@@ -5,14 +5,14 @@ let keyBy = require('lodash.keyby');
 
 let log = require('../log.js');
 
-module.exports = (client) => {
+module.exports = (client, fields) => {
   return [
     {
       // Property metadata.
-      'route': 'properties[{integers:ids}].is_favorite',
+      'route': `properties.byIndex[{integers:ids}][${fields.map(f => `'${f}'`).join(',')}]`,
       'set': log((pathSet) => {
         // Keys we are updating.
-        let keys = _.keys(pathSet.properties);
+        let keys = _.keys(pathSet.properties.byIndex);
 
         // Get all documents.
         return client.allDocs({
@@ -25,10 +25,10 @@ module.exports = (client) => {
           let bulk = _.map(keys, (key) => {
             // Create a new document if it does not exist already.
             if (docs[key].error == 'not_found') {
-              return _.extend({ '_id': key }, pathSet.properties[key]);
+              return _.extend({ '_id': key }, pathSet.properties.byIndex[key]);
             // Update an existing document.
             } else {
-              return _.extend(docs[key].doc, pathSet.properties[key]);
+              return _.extend(docs[key].doc, pathSet.properties.byIndex[key]);
             }
           });
 
@@ -40,10 +40,10 @@ module.exports = (client) => {
             let results = _.map(bulk, (doc) => {
               // Action successful.
               if (doc._id in res && res[doc._id].ok) {
-                return _.map(pathSet.properties[doc._id], (val, key) => {
+                return _.map(pathSet.properties.byIndex[doc._id], (val, key) => {
                   // What is the current value for this key?
                   return {
-                    'path': [ 'properties', doc._id, key ],
+                    'path': [ 'properties', 'byIndex', doc._id, key ],
                     'value': key in doc ? doc[key] : null
                   };
                 });
@@ -51,7 +51,7 @@ module.exports = (client) => {
               //  exists in ElasticSearch, so...
               } else {
                 return {
-                  'path': [ 'properties', doc._id ],
+                  'path': [ 'properties', 'byIndex', doc._id ],
                   'value': null
                 }
               }
@@ -75,14 +75,14 @@ module.exports = (client) => {
 
             // 404 or 500.
             if (doc.error) return {
-              'path': [ 'properties', id ],
+              'path': [ 'properties', 'byIndex', id ],
               'value': doc.error == 'not_found' ? null : doc.error
             }
 
-            let keys = pathSet[2];
+            let keys = pathSet[3];
             return _.map(_.isArray(keys) ? keys : [ keys ], (key) => {
               return {
-                'path': [ 'properties', id, key ],
+                'path': [ 'properties', 'byIndex', id, key ],
                 'value': key in doc.doc ? doc.doc[key] : null
               };
             });

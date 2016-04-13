@@ -1,0 +1,14 @@
+{
+  "fields": {
+    "elastic": [
+      "account_number",
+      "house_number",
+      "street_name",
+      "value",
+      "neighbourhood"
+    ],
+    "pouch": [
+      "is_favorite"
+    ]
+  }
+}

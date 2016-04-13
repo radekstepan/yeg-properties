@@ -2,7 +2,7 @@ import React from 'react';
 import { RouterMixin, navigate } from 'react-mini-router';
 import _ from 'lodash';
 
-import ProductsPage from './components/pages/ProductsPage.jsx';
+import ListPage from './components/pages/ListPage.jsx';
 import NotFoundPage from './components/pages/NotFoundPage.jsx';
 
 import actions from './actions/appActions.js';
@@ -14,7 +14,7 @@ delete RouterMixin.handleClick;
 
 // Values are function names below.
 let routes = {
-  '/': 'products'
+  '/': 'list'
 };
 
 let blank = false;
@@ -73,10 +73,9 @@ export default React.createClass({
     }
   },
 
-  // Products page.
-  products() {
-    process.nextTick(() => actions.emit('products.load'));
-    return <ProductsPage />;
+  // List page.
+  list() {
+    return <ListPage />;
   },
 
   // 404.
