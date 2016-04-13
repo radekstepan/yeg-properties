@@ -27,13 +27,15 @@ A React client can be loaded by visiting the root address of the started service
 
 ##Optimizations
 
+These are some of the features/optimizations one could do.
+
 ###Falcor
-- bootstrap data on the client; set data on model cache
-- near real-time data updates; set model cache size to 0 OR write your own scheduler
-- many to many references; model $ref
-- beyond get/set; function routes like push
-- security; Headers in HttpDataSource & say JWT in Express https://auth0.com/docs/quickstart/backend/falcor
+- To **bootstrap** data on the client one can preset model with an initial cache.
+- In environments that require **near real-time** data updates, model cache can be set to size 0 OR a custom request scheduler can be written.
+- Falcor handles **many to many** references using `falcor.ref`.
+- Custom **functions** can be mapped to routes for actions such as entity adding and removal.
+- As for **security**, `Headers` can be passed to `Falcor.HttpDataSource` and on the service side say JWT in Express can be used; e.g.: https://auth0.com/docs/quickstart/backend/falcor
 
 ###React
-1. PureRenderMixin
-1. shouldComponentUpdate
+1. `PureRenderMixin` tells React that the output of a component will be the same for the same inputs.
+1. `shouldComponentUpdate` custom logic deciding if a re-render should happen when inputs change.
