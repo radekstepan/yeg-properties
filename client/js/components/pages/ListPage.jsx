@@ -23,7 +23,7 @@ export default React.createClass({
     let icon = <Icon name="spin" className={cls({ 'active': app.system.loading })} />;
 
     // Table head field generator.
-    let field = (key) => <div key={key} className="td">{key}</div>;
+    let field = (key) => <div key={key} className="td">{key.replace(/_/g, ' ')}</div>;
 
     return (
       <div>
@@ -39,6 +39,7 @@ export default React.createClass({
             {field('house_number')}
             {field('neighbourhood')}
             {field('value')}
+            {field('is_favorite')}
           </div>
         </div>
         <List {...app} />

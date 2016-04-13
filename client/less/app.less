@@ -28,7 +28,7 @@ html, head {
 
   .td {
     display: inline-block;
-    width: 16%;
+    width: 12.66%;
     padding: 0 2%;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -103,8 +103,8 @@ html, head {
 
     .item {
       border-bottom: 1px solid #E0E0E0;
-      .box-sizing(border-box);
       color: #1D1D1D;
+      .box-sizing(border-box);
 
       &:hover {
         cursor: pointer;
@@ -112,6 +112,14 @@ html, head {
         .td {
           .transition(background-color 0.2s ease);
           background-color: #FFF8E0 !important;
+        }
+      }
+
+      .icon.heart {
+        color: #EFEFEF;
+
+        &.active {
+          color: #FF2641;
         }
       }
 

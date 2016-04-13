@@ -3,7 +3,8 @@ import cls from 'classnames';
 
 // Fontello icon hex codes.
 let codes = {
-  'spin': '\e800'
+  'spin': '\e800', // Fontelico - spin6
+  'heart': '\e801' // Font Awesome - heart
 };
 
 export default React.createClass({

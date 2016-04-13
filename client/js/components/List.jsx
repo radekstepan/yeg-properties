@@ -6,6 +6,8 @@ import numeral from 'numeral';
 
 import actions from '../actions/appActions.js';
 
+import Icon from './Icon.jsx';
+
 export default React.createClass({
 
   displayName: 'List.jsx',
@@ -14,6 +16,10 @@ export default React.createClass({
 
   _onScroll() {
     actions.emit('evt.scroll', this.refs.el.scrollTop);
+  },
+
+  _onFav(id) {
+    actions.emit('list.favorite', id);
   },
 
   render() {
@@ -43,13 +49,17 @@ export default React.createClass({
       // Do we have the item already?
       let content, item;
       if (item = cache.properties.byIndex[id]) {
+        let active = 'is_favorite' in item && item.is_favorite.value == 'Y';
         content = (
-          <div className="wrap">
+          <div className="wrap" onClick={this._onFav.bind(this, id)}>
             {field('account_number')}
             {field('street_name')}
             {field('house_number')}
             {field('neighbourhood')}
             {field('value', '$0,0[.]00')}
+            <div key="is_favorite" className="td">
+              <Icon name="heart" className={cls({ active })} />
+            </div>
           </div>
         );
       // Load it then.

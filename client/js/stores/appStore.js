@@ -74,11 +74,17 @@ class AppStore extends Store {
       "street_name",
       "house_number",
       "neighbourhood",
-      "value"
+      "value",
+      "is_favorite"
     ]])
-    .then((res) => {
-      this.emit('%list_updated%');
-    });
+    // Just emit something so we re-render...
+    .then(res => this.emit('%UPDATE%'));
+  }
+
+  onListFavorite(id) {
+    this.model
+    .setValue([ 'properties', 'byIndex', id, 'is_favorite' ], 'Y')
+    .then(res => this.emit('%UPDATE%'));
   }
 
   onSystemLoading(state) {
